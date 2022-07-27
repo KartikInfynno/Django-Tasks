@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css">
+    <style>
+        form {
+            width: 400px;
+            height: 600px;
+            padding: 25px;
+            /* border: 1px solid black; */
+            border-radius: 25px;
+            background: #F1F7E7;
+        }
+        
+        .form-div {
+            margin: 50px;
+        }
+        
+        .main {
+            display: flex;
+            /* justify-content: space-evenly;   */
+        }
+        
+        .table-div {
+            margin: 50px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="main">
+        <div class="form-div" id="myForm" onsubmit="reset();">
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Name</label> {{ form.name }}
+                    <!-- <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Username"> -->
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Email address</label> {{ form.email }}
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Contact No</label> {{ form.contact_no }}
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Issue</label> {{ form.issue }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">Description</label> {{ form.description }}
+                </div>
+
+                <input type="submit" class="btn btn-dark" value="Submit">
+
+            </form>
+        </div>
+
+        <div class="table-div">
+            <table class="table table-dark">
+                <thead>
+                    <tr>
+                        <th scope="col" id="name">Name</th>
+                        <th scope="col" id="email">Email</th>
+                        <th scope="col" id="contact">Contact_No</th>
+                        <th scope="col" id="issue">Issue</th>
+                        <th scope="col" id="description">Description</th>
+                        <th scope="col">Button</th>
+                    </tr>
+                </thead>
+                <tbody class="Data-Body">
+                    {% for i in data %}
+                    <tr class="tabel" id='{{ c }}'>
+                        <td id='{{ i.email }}_name'>{{ i.name }}</td>
+                        <td id={{ i.email }}>{{ i.email }}</td>
+                        <td id={{ i.contact_no }}>{{ i.contact_no }}</td>
+                        <td id={{ i.issue }}>{{ i.issue }}</td>
+                        <td id={{ i.description }}>{{ i.description }}</td>
+                        <td><button class="btn btn-primary updatwBtn" onclick="myFunc('{{i.name}}','{{i.email}}','{{i.contact_no}}','{{i.issue}}','{{i.description}}');">Update</button></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+
+
+    </div>
+    <script>
+        let btn = document.querySelector(".updatwBtn");
+        let Fname = document.querySelector("#id_name");
+        let Femail = document.querySelector("#id_email");
+        let Fcontact_no = document.querySelector("#id_contact_no");
+        let Fissue = document.querySelector("#id_issue");
+        let Fdescription = document.querySelector("#id_description");
+
+        function reset() {
+            console.log("resetting");
+            document.getElementById("myForm").reset();
+            return false;
+        }
+        // btn.addEventListener("click", myFunc)
+
+        function myFunc(name, email, contact_no, issue, description) {
+
+            console.log({
+                email: email,
+                name: name,
+                contact_no: contact_no,
+                issue: issue,
+                description: description,
+            });
+
+
+            console.log(Fname.value);
+            Fname.value = name;
+            Femail.value = email;
+            Fcontact_no.value = contact_no;
+            Fissue.value = issue;
+            Fdescription.value = description;
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
