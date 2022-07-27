@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css">
+    <style>
+        form {
+            width: 400px;
+            height: 600px;
+            padding: 25px;
+            /* border: 1px solid black; */
+            border-radius: 25px;
+            background: #F1F7E7;
+        }
+        
+        .form-div {
+            margin: 50px;
+        }
+        
+        .main {
+            display: flex;
+            /* justify-content: space-evenly;   */
+        }
+        
+        .table-div {
+            margin: 50px;
+            width: 690px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="main">
+        <div class="form-div">
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">First Name</label> {{ form.first_name }}
+                    <!-- <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Username"> -->
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Last Name</label> {{ form.last_name }}
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Contact No</label> {{ form.contact_no }}
+                </div>
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Age</label> {{ form.age }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">Gender</label> {{ form.gender }}
+                </div>
+
+                <input type="submit" class="btn btn-dark" value="Submit" style="margin-top: 50px;">
+
+            </form>
+
+
+        </div>
+        <div class="table-div">
+            <table class="table table-dark">
+                <thead>
+                    <tr>
+                        <th scope="col" id="name">Name</th>
+                        <th scope="col" id="email">Email</th>
+                        <th scope="col" id="contact">Contact_No</th>
+                        <th scope="col" id="issue">Issue</th>
+                        <th scope="col" id="description">Description</th>
+                        <th scope="col">Update</th>
+                        <th scope="col">Delete</th>
+                    </tr>
+                </thead>
+                <tbody class="Data-Body">
+                    {% for i in data %}
+                    <tr class="tabel">
+                        <td>{{ i.first_name }}</td>
+                        <td>{{ i.last_name }}</td>
+                        <td>{{ i.contact_no }}</td>
+                        <td>{{ i.age }}</td>
+                        <td>{{ i.gender }}</td>
+                        <td>
+                            <a href="{% url 'update' i.id %}"><button class="btn btn-success updatwBtn">Update</button></a>
+                        </td>
+                        <td>
+                            <a href="{% url 'delete' i.id %}"><button class="btn btn-danger updatwBtn">Delete</button></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js "></script>
+</body>
+
+</html
