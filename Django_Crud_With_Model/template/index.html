@@ -1,0 +1,3 @@
+<a href="{% url 'create' %}">Click to Create</a>
+<br><br> {% for data in data %} <a href="{% url 'detail' data.id %}">{{ data.name }}</a>
+<br><br> {% endfor %}
