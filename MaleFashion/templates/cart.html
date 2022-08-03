@@ -52,7 +52,7 @@
                                     </div>
                                 </td>
                                 <td class="cart__price">${{ i.total_price }}</td>
-                                <td class="cart__close"><a href="{% url 'delete_cart' i.id %}"><i class="fa fa-close"></i></a></td>
+                                <td class="cart__close"><a href="{% url 'remove_cart' i.id %}"><i class="fa fa-close"></i></a></td>
                             </tr>
                             {% endfor %}
 
@@ -67,7 +67,7 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6">
                         <div class="continue__btn update__btn">
-                            <a href="#"><i class="fa fa-spinner"></i> Update cart</a>
+                            <a href="{% url 'index' %}"><i class="fa fa-spinner"></i> Update cart</a>
                         </div>
                     </div>
                 </div>

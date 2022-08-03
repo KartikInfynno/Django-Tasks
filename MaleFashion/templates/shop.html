@@ -116,13 +116,13 @@
                             <div class="product__item__pic set-bg" data-setbg="{{ i.image.url }}">
                                 <ul class="product__hover">
                                     <li>
-                                        <a href="{% url 'add_wishlist' i.id %}"><img src="{% static 'img/icon/heart.png' %}" alt=""></a>
+                                        <a href="#"><img src="{% static 'img/icon/heart.png' %}" alt=""></a>
                                     </li>
                                 </ul>
                             </div>
                             <div class="product__item__text">
                                 <h6>{{ i.name }}</h6>
-                                <a href="{% url 'add_cart' i.id %}" class="add-cart">+ Add To Cart</a>
+                                <a href="{% url 'product_detail' i.id %}" class="add-cart">View Item</a>
                                 <div class="rating">
                                     <i class="fa fa-star-o"></i>
                                     <i class="fa fa-star-o"></i>
@@ -131,27 +131,29 @@
                                     <i class="fa fa-star-o"></i>
                                 </div>
                                 <h5>${{ i.price }}</h5>
-                                <div class="product__color__select">
-                                    <label for="pc-4">
-                                            <input type="radio" id="pc-4">
-                                        </label>
-                                    <label class="active black" for="pc-5">
-                                            <input type="radio" id="pc-5">
-                                        </label>
-                                    <label class="grey" for="pc-6">
-                                            <input type="radio" id="pc-6">
-                                        </label>
-                                </div>
+
                             </div>
                         </div>
                     </div>
                     {% endfor %}
                 </div>
 
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        {% if data.has_other_pages %}
+                        <div class="product__pagination">
+                            {% for i in data.paginator.page_range %} {% if data.number == i %}
+                            <a class="active" href="?page={{ i }}">{{ i }}</a> {% else %}
+                            <a href="?page={{ i }}">{{ i }}</a> {% endif %}{% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </section>
 <!-- Shop Section End -->
 
-{% endblock %}sss
+{% endblock %}

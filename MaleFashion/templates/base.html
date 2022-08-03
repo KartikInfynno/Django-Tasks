@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/elegant-icons.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/nice-select.css' %}" type="text/css">
+    <!-- <link rel="stylesheet" href="{% static 'css/nice-select.css' %}" type="text/css"> -->
     <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/slicknav.min.css'%}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
@@ -35,23 +35,17 @@
     <div class="offcanvas-menu-wrapper">
         <div class="offcanvas__option">
             <div class="offcanvas__links">
-                <a href="#">Sign in</a>
-                <a href="#">FAQs</a>
-            </div>
-            <div class="offcanvas__top__hover">
-                <span>Usd <i class="arrow_carrot-down"></i></span>
-                <ul>
-                    <li>USD</li>
-                    <li>EUR</li>
-                    <li>USD</li>
-                </ul>
+                {% if request.user.is_authenticated %}
+                <a href="{% url 'logout' %}"> Logout </a> {% else %}
+                <a href="{% url 'login' %}">Sign in</a>
+                <a href="{% url 'register' %}">Sign up</a> {% endif %}
             </div>
         </div>
         <div class="offcanvas__nav__option">
-            <a href="#" class="search-switch"><img src="{% static 'img/icon/search.png'%}" alt=""></a>
+            <!-- <a href="#" class="search-switch"><img src="{% static 'img/icon/search.png'%}" alt=""></a> -->
             <a href="#"><img src="{% static 'img/icon/heart.png' %}" alt=""></a>
             <a href="#"><img src="{% static 'img/icon/cart.png' %}" alt=""> <span>0</span></a>
-            <div class="price">$0.00</div>
+            <div class="price">${{ total_price }}</div>
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__text">
@@ -73,16 +67,10 @@
                     <div class="col-lg-6 col-md-5">
                         <div class="header__top__right">
                             <div class="header__top__links">
-                                <a href="#">Sign in</a>
-                                <a href="#">FAQs</a>
-                            </div>
-                            <div class="header__top__hover">
-                                <span>Usd <i class="arrow_carrot-down"></i></span>
-                                <ul>
-                                    <li>USD</li>
-                                    <li>EUR</li>
-                                    <li>USD</li>
-                                </ul>
+                                {% if request.user.is_authenticated %}
+                                <a href="{% url 'logout' %}"> Logout </a> {% else %}
+                                <a href="{% url 'login' %}">Sign in</a>
+                                <a href="{% url 'register' %}">Sign up</a> {% endif %}
                             </div>
                         </div>
                     </div>
@@ -101,9 +89,16 @@
                         <ul>
                             <li class="active"><a href="{% url 'index' %}">Home</a></li>
                             <li><a href="{% url 'shop' %}">Shop</a></li>
-                            <li><a href="{% url 'cart' %}">Cart</a></li>
-                            <li><a href="{% url 'create' %}">Add Product</a></li>
-                            <li><a href="{% url 'wishlist' %}">Wishlist</a></li>
+                            <li><a href="#">Pages</a>
+                                <ul class="dropdown">
+                                    <li><a href="{% url 'cart' %}">Cart</a></li>
+                                    {% if request.user.user_type == 'Seller Account' %}
+                                    <li><a href="{% url 'Seller:add_products' %}">Add Product</a></li>
+                                    {% endif %}
+                                    <li><a href="{% url 'wishlist' %}">Wishlist</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="{% url 'contact_us' %}">Contact US</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -171,19 +166,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <div class="footer__copyright__text">
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        <p>Copyright ©
-                            <script>
-                                document.write(new Date().getFullYear());
-                            </script>2020 All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                        </p>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    </div>
-                </div>
-            </div>
+
         </div>
     </footer>
     <!-- Footer Section End -->
@@ -202,7 +185,7 @@
     <!-- Js Plugins -->
     <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+    <!-- <script src="{% static 'js/jquery.nice-select.min.js' %}"></script> -->
     <script src="{% static 'js/jquery.nicescroll.min.js' %}"></script>
     <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
     <script src="{% static 'js/jquery.countdown.min.js' %}"></script>

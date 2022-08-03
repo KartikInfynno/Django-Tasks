@@ -106,22 +106,23 @@
             <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
                 <div class="product__item">
                     <div class="product__item__pic set-bg" data-setbg="{{ i.image.url }}">
+
                         <span class="label">New</span>
                         <ul class="product__hover">
                             <li>
                                 <a href="{% url 'add_wishlist' i.id %}"><img src="{% static 'img/icon/heart.png' %}" alt=""></a>
                             </li>
                             <li>
-                                <a href="#"><img src="{% static 'img/icon/compare.png' %}" alt=""> <span>Compare</span></a>
+                                <a href="{% url 'add_cart' i.id %}"> <img src="{% static 'img/cart.svg' %}" alt=""></a>
                             </li>
-                            <li>
-                                <a href="#"><img src="{% static 'img/icon/search.png' %}" alt=""></a>
-                            </li>
+
                         </ul>
                     </div>
+                    <!-- </a> -->
+
                     <div class="product__item__text">
                         <h6>{{ i.name }}</h6>
-                        <a href="{% url 'add_cart' i.id %}" class="add-cart">+ Add To Cart</a>
+                        <a href="{% url 'product_detail' i.id %}" class="add-cart">View Item</a>
                         <div class="rating">
                             <i class="fa fa-star-o"></i>
                             <i class="fa fa-star-o"></i>
@@ -129,6 +130,7 @@
                             <i class="fa fa-star-o"></i>
                             <i class="fa fa-star-o"></i>
                         </div>
+                        <h6>Seller : <span>{{ i.user }}</span></h6>
                         <h5>${{ i.price }}</h5>
                         <div class="product__color__select">
                             <label for="pc-1">
