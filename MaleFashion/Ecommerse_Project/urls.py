@@ -23,6 +23,7 @@ urlpatterns = [
     path('', include('Base_App.urls')),
     path('Auth/', include('Auths.urls')),
     path('Seller/', include('My_Seller.urls')),
+    path('blog/', include('blogapp.urls')),
 ]
 
 if settings.DEBUG:
