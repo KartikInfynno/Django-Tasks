@@ -1,0 +1,1 @@
+{% for i in data %} {{ i.title }} {{ i.pub_date }} {{ object.is_approved|yesno:"Approved,Not Approved" }} {% endfor %}

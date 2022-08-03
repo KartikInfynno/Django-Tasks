@@ -91,14 +91,23 @@
                             <li><a href="{% url 'shop' %}">Shop</a></li>
                             <li><a href="#">Pages</a>
                                 <ul class="dropdown">
-                                    <li><a href="{% url 'cart' %}">Cart</a></li>
-                                    {% if request.user.user_type == 'Seller Account' %}
-                                    <li><a href="{% url 'Seller:add_products' %}">Add Product</a></li>
-                                    {% endif %}
                                     <li><a href="{% url 'wishlist' %}">Wishlist</a></li>
+                                    <!-- <li><a href="./shop-details.html">Shop Details</a></li> -->
+                                    <li><a href="{% url 'cart' %}">Shopping Cart</a></li>
+                                    <!-- <li><a href="./checkout.html">Check Out</a></li> -->
+                                    <li><a href="./blog-details.html">Blog Details</a></li>
                                 </ul>
                             </li>
-                            <li><a href="{% url 'contact_us' %}">Contact US</a></li>
+                            <li><a href="{% url 'blog' %}">Blog</a>
+                                <ul class="dropdown">
+                                    <li><a href="{% url 'blog' %}">Wishlist</a></li>
+                                    <li><a href="#">My Blogs</a></li>
+                                    <!-- <li><a href="{% url 'cart' %}">Shopping Cart</a></li> -->
+                                    <!-- <li><a href="./checkout.html">Check Out</a></li> -->
+                                    <!-- <li><a href="./blog-details.html">Blog Details</a></li> -->
+                                </ul>
+                            </li>
+                            <li><a href="{% url 'contact_us' %}">Contacts</a></li>
                         </ul>
                     </nav>
                 </div>
