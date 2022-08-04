@@ -1,4 +1,3 @@
-from pydoc import pager
 from django.shortcuts import redirect, render
 from Auths.models import My_User
 from My_Seller.models import Add_Product
@@ -10,6 +9,8 @@ from django.db.models import Q
 from django.conf import settings
 import random
 from django.core.mail import send_mail
+from blogapp.models import Blogs
+
 
 def index(request):
 
@@ -182,3 +183,6 @@ def contact_us(request):
 
 def test(request):
     return render(request, 'test.html')
+
+
+

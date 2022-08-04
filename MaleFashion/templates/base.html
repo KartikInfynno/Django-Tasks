@@ -98,15 +98,22 @@
                                     <li><a href="./blog-details.html">Blog Details</a></li>
                                 </ul>
                             </li>
-                            <li><a href="{% url 'blog' %}">Blog</a>
+                            <li><a href="{% url 'blog' %}">Blog</a> {% if user.is_authenticated %}
+
                                 <ul class="dropdown">
-                                    <li><a href="{% url 'blog' %}">Wishlist</a></li>
-                                    <li><a href="#">My Blogs</a></li>
-                                    <!-- <li><a href="{% url 'cart' %}">Shopping Cart</a></li> -->
+                                    <li><a href="{% url 'blog' %}">Blogs</a></li>
+                                    <li><a href="{% url 'blog_post' %}">Add Blog</a></li>
+                                    <li><a href="{% url 'my_blog' %}">My Blogs</a></li>
+
                                     <!-- <li><a href="./checkout.html">Check Out</a></li> -->
                                     <!-- <li><a href="./blog-details.html">Blog Details</a></li> -->
                                 </ul>
+                                {% endif %}
                             </li>
+                            {% if user.is_superuser %}
+
+                            <li><a href="{% url 'admin_approve' %}">Admin</a></li>
+                            {% endif %}
                             <li><a href="{% url 'contact_us' %}">Contacts</a></li>
                         </ul>
                     </nav>
