@@ -1,0 +1,79 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+
+
+<div class="container h-50 mt-5 mb-5">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-lg-12 col-xl-11">
+            <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+                <h3 class='title mb-4'>Admin Panel</h3>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                <table class="table table-striped mb-5">
+                    <thead>
+                        <tr>
+                            <th scope="col">No.</th>
+                            <th scope="col">Blog Title</th>
+                            <th scope="col">Author</th>
+                            <th scope="col">Published On</th>
+                            <th scope="col">Approval</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!--
+                            We itreate The Data List That we send here by Context
+                         -->
+                        {% for i in blog_list %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ i.title }}</td>
+                            <td>{{ i.user }}</td>
+                            <td>{{ i.pub_date }}</td>
+                            <td>
+                                <!--
+                                    Chech if the Blog Is Approved By Admin or not
+                                    if the blog is approved by admin
+                                    the checkbox will show as it's checked
+                                    and if it is not approved by admin
+                                    it'll not checked
+                                 -->
+                                {% if i.is_approved %}
+                                <!--
+                                    here we took a div which has a input type checkbox
+                                    and we make it checked if it is approved by admin
+                                    and named that input field as Boxes So we can
+                                    use post Method When we try to handle it by views.py
+                                 -->
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" checked="checked" value={{ i.id }} name='boxes'>
+                                </div>
+                                {% else %}
+                                <!--
+                                    on the Else Part We Didn't make it checked if it is not approved by admin
+                                    but it'll show the details of the blog too
+                                 -->
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value={{ i.id }} name='boxes'>
+                                </div>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <button class="btn btn-secondary" type="submit"> Update Approval </button>
+                <!--
+                    This Is The Messages That We send here by server
+                 -->
+                {% if message %} {{ message }} {% endif %} {% if messages %} {% for msg in messages %}
+
+                <p>
+                    <center><i>{{ msg }} </center></i></p>
+                {% endfor %} {% endif %}
+
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
