@@ -15,15 +15,22 @@
                         <th scope="col">Title</th>
                         <th scope="col">Published On</th>
                         <th scope="col">Approval</th>
+                        <!-- <th scope="col">Update</th> -->
+                        <th scope="col">Delete</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for i in data %}
                     <tr>
                         <th scope="row">{{ forloop.counter }}</th>
-                        <td>{{ i.title }}</td>
+                        <td>
+                            <a href="{% url 'blog_detail' i.id%}">{{ i.title }}</a></td>
                         <td>{{ i.pub_date }}</td>
                         <td>{{ i.is_approved|yesno:"Approved,Not Approved" }}</td>
+                        <td>
+                            <a href="{% url 'blog_delete' i.id %}"><button class="btn btn-danger" onclick="alert('Delete')" title="Delete">Delete</button></a>
+                        </td>
+                        <!-- <input type="button" value="abc" id=""> -->
                     </tr>
                     {% endfor %}
                 </tbody>

@@ -1,0 +1,269 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: #f7f6f6
+        }
+        
+        .card {
+            border: none;
+            box-shadow: 5px 6px 6px 2px #e9ecef;
+            border-radius: 4px;
+        }
+        
+        .dots {
+            height: 4px;
+            width: 4px;
+            margin-bottom: 2px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        
+        .badge {
+            padding: 7px;
+            padding-right: 9px;
+            padding-left: 16px;
+            box-shadow: 5px 6px 6px 2px #e9ecef;
+        }
+        
+        .user-img {
+            margin-top: 4px;
+        }
+        
+        .check-icon {
+            font-size: 17px;
+            color: #c3bfbf;
+            top: 1px;
+            position: relative;
+            margin-left: 3px;
+        }
+        
+        .form-check-input {
+            margin-top: 6px;
+            margin-left: -24px !important;
+            cursor: pointer;
+        }
+        
+        .form-check-input:focus {
+            box-shadow: none;
+        }
+        
+        .icons i {
+            margin-left: 8px;
+        }
+        
+        .reply {
+            margin-left: 12px;
+        }
+        
+        .reply small {
+            color: #b7b4b4;
+        }
+        
+        .reply small:hover {
+            color: green;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Blog Details Hero Begin -->
+    {% if blog_list.is_approved %}
+
+    <section class="blog-hero spad">
+        <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-9 text-center">
+                    <div class="blog__hero__text">
+                        <h2>{{ blog_list.title }}</h2>
+                        <ul>
+                            <li>By <strong>{{ blog_list.user }}</strong></li>
+                            <li>{{ blog_list.pub_date }}</li>
+                            <li>{{ total_comments }} Comments</li>
+                            <li>{{ blog_list.count}} Views</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Blog Details Hero End -->
+
+    <!-- Blog Details Section Begin -->
+    <section class="blog-details spad">
+        <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-12">
+                    <div class="blog__details__pic">
+                        {% if blog_list.b_image.url %}
+
+                        <img src="{{ blog_list.b_image.url }}" height="600px" width="1170px" alt=""> {% endif %}
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="blog__details__content">
+                        <div class="blog__details__share">
+                            <span>share</span>
+                            <ul>
+                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                <li><a href="#" class="twitter"><i class="fa fa-twitter"></i></a></li>
+                                <li><a href="#" class="youtube"><i class="fa fa-youtube-play"></i></a></li>
+                                <li><a href="#" class="linkedin"><i class="fa fa-linkedin"></i></a></li>
+                                <li><a href="{% url 'add_fav_blog' blog_list.id %}" class="youtube"><i class="fa fa-heart"></i></a></li>
+                            </ul>
+                        </div>
+                        <div class="blog__details__text">
+                            <p>{{ blog_list.descriptions|safe }}</p>
+                        </div>
+                        <div class="blog__details__quote">
+                            <i class="fa fa-quote-left"></i>
+                            <p>“When designing an advertisement for a particular product many things should be researched like where it should be displayed.”</p>
+                            <h6>_ John Smith _</h6>
+                        </div>
+                        <div class="blog__details__option">
+                            <div class="row d-flex justify-content-center align-items-center h-100">
+                                <h3 class="mb-4">Comments</h3>
+                            </div>
+                            {% if comment %}
+
+
+                            <div class="container">
+                                <div class="row  d-flex justify-content-center">
+                                    <div class="col">
+                                        {% for i in comment %} {% if i.is_approved or request.user == i.blog.user %}
+
+
+                                        <div class="card p-3 mt-2">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="user d-flex flex-row align-items-center">
+                                                    <!-- <img src="https://i.imgur.com/hczKIze.jpg" width="30" class="user-img rounded-circle mr-2"> -->
+                                                    <span><h5 class="font-weight-bold text-primary">{{ i.name }}</h5> <small class="font-weight-bold">{{ i.comment }}</small></span>
+                                                </div>
+                                                <small>{{ i.post_date }}</small>
+                                            </div>
+                                            <div class="action d-flex justify-content-between mt-2 align-items-center">
+                                                {% if request.user == i.blog.user %} {% if i.is_approved %}
+                                                <form method="post">
+                                                    {% csrf_token %}
+                                                    <div>
+                                                        Approval Status <input type="checkbox" checked="checked" value={{ i.id }} name='boxes'>
+                                                        <input type="submit" value="Approve" id={{ i.id }}></div>
+                                                </form>
+                                                {{ i.id }} {% else %}
+                                                <form method="post">
+                                                    {% csrf_token %} Approval Status <input type="checkbox" value={{ i.id }} name='boxes'>
+                                                    <input type="submit" value="Approve" id={{ i.id }}>
+                                                </form>
+                                                {% endif %} {% endif %} {% if i.is_approved %}
+                                                <div>Approved Comment</div>
+                                                {% else %}
+                                                <div>Comment is not Approved by Blogger</div>
+                                                {% endif %}
+                                                <div class="icons align-items-center">
+                                                    {% if i.is_approved %}
+                                                    <i class="fa fa-check-circle-o check-icon text-primary"></i> {% else %}
+                                                    <i class="fa fa-check-circle-o check-icon"></i> {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endif %} {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% else %}
+                            <div class="container">
+                                <div class="row  d-flex justify-content-center">
+                                    <h3>No Comments</h3>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <!-- <div class="blog__details__btns">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <a href="" class="blog__details__btns__item">
+                                    <p><span class="arrow_left"></span> Previous Pod</p>
+                                    <h5>It S Classified How To Utilize Free Classified Ad Sites</h5>
+                                </a>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <a href="" class="blog__details__btns__item blog__details__btns__item--next">
+                                    <p>Next Pod <span class="arrow_right"></span></p>
+                                    <h5>Tips For Choosing The Perfect Gloss For Your Lips</h5>
+                                </a>
+                            </div>
+                        </div>
+                    </div> -->
+
+                        {% if request.user.is_authenticated %}
+
+
+                        <div class="blog__details__comment">
+                            <h4>Leave A Comment</h4>
+                            <form action="#">
+                                <div class="row">
+
+                                    <div class="col-lg-12 col-md-6">
+                                        <input type="text" placeholder="Name" name="name">
+                                    </div>
+                                    <div class="col-lg-12 text-center">
+                                        <textarea placehoder="Comment" name="comment"></textarea>
+                                        <button type="submit" class="site-btn">Post Comment</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        {% else %}
+                        <div class="blog__details__comment">
+                            <h4><a href="{% url 'login' %}">Login</a> / <a href="{% url 'register' %}">Register</a> To Comment on This Post</h4>
+
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="blog__details__btns mt-5">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <a href="{% url 'blog_detail' blog1.id %}" class="blog__details__btns__item">
+                                    <p><span class="arrow_left"></span> Previous Pod</p>
+                                    <h5>{{ blog1.title }}</h5>
+                                </a>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <a href="{% url 'blog_detail' blog2.id %}" class="blog__details__btns__item blog__details__btns__item--next">
+                                    <p>Next Pod <span class="arrow_right"></span></p>
+                                    <h5>{{ blog2.title }}</h5>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% else %}
+    <div class="container h-50 mt-5 mb-5">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-lg-12 col-xl-11">
+                <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+                    <h3 class='title mb-4'>Can Not See This Blog</h3>
+                    <h4> This Blog is Under Verification </h4>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Blog Details Section End -->
+</body>
+
+</html>
+{% endblock content %}

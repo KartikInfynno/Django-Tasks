@@ -1,81 +1,15 @@
-<!-- {% extends 'base.html' %}{% block content %} -->
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <title>Home</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <style>
-        .navbar-nav {
-            color: rgb(255, 255, 255);
-        }
-        
-        .navbar-dark .navbar-nav {
-            color: rgba(255, 255, 255, 0.5);
-            font-weight: 100;
-        }
-        
-        .abc {
-            color: rgb(255, 0, 128);
-            font-weight: bolder;
-            margin-left: 1020px;
-        }
-        
-        .bg-dark {
-            background-color: #82258f !important;
-        }
-        
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        
-        th,
-        td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        th {
-            background-color: rgb(139, 255, 245);
-        }
-        
-        tr:hover {
-            background-color: #ccfab9bb;
-        }
-    </style>
-</head>
-
-<body>
-
-    <center>
-        <h1> Login </h1>
-    </center>
-    <form method="post">
-        {% csrf_token %}
-        <br>
-        <br>
-        <br>
-        <br>
-        <center> {{ form.as_p }} </center>
-
-        <center><input type="submit" value="Login"></center>
-    </form>
-    {% if messages %} {% for msg in messages %}
-
-    <p>
-        <center><i>{{ msg }} </center></i></p>
-    {% endfor %} {% endif %}
-
-    <br>
-    <center> <a href="{% url 'register' %}">Register Now</a></center>
-</body>
-
-</html>
-{% endblock %}
+<div class="col-lg-6 col-md-6">
+    <nav class="header__menu mobile-menu">
+        <ul>
+            <li><a href="#">Pages</a>
+                <ul class="dropdown">
+                    <li><a href="{% url 'wishlist' %}">Wishlist</a></li>
+                    <!-- <li><a href="./shop-details.html">Shop Details</a></li> -->
+                    <li><a href="{% url 'cart' %}">Shopping Cart</a></li>
+                    <!-- <li><a href="./checkout.html">Check Out</a></li> -->
+                    <li><a href="./blog-details.html">Blog Details</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</div>

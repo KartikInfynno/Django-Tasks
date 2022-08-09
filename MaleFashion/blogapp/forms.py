@@ -12,4 +12,5 @@ class Post_Blog(forms.ModelForm):
         widgets = {
             'title' : forms.TextInput(attrs={'placeholder': 'Title', 'class': 'form-control form-control-lg', 'placeholder': 'Enter Title'}),
             'b_image' : forms.widgets.ClearableFileInput(attrs={'class': 'form-control form-control-lg','type': 'file'}),
+            # 'descriptions' : forms.widgets.ClearableFileInput(attrs={'class': 'form-control form-control-lg m-5','type': 'file'}),
         }

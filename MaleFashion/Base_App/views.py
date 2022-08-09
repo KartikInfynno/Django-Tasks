@@ -13,10 +13,11 @@ from blogapp.models import Blogs
 
 
 def index(request):
-
     data = Add_Product.objects.all()
+    blog = Blogs.objects.all()
     context = {
-        'data' : data,
+        'data' : random.choices(data, k=4),
+        # 'blog' : random.choices(blog, k=3)
     }
     return render(request,"index.html",context)
 

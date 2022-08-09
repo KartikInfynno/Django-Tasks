@@ -42,6 +42,7 @@ def user_login(request):
         if user is not None:
             login_user(request, user)
             # if user.user_type == "Seller Account":
+            messages.success(request, "Logged in Successfully")
             return redirect('index')
 
         else:

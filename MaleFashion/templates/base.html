@@ -22,13 +22,24 @@
     <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/slicknav.min.css'%}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+    <!-- <link href="{% static 'css/toastr.min.css' %}" rel="stylesheet"> -->
+    <!-- CSS -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+    <!-- Default theme -->
+    <!-- <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" /> -->
+    <!-- Semantic UI theme -->
+    <!-- <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css" /> -->
+    <!-- Bootstrap theme -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/bootstrap.min.css" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 </head>
 
 <body>
     <!-- Page Preloder -->
-    <div id="preloder">
+    <!-- <div id="preloder">
         <div class="loader"></div>
-    </div>
+    </div> -->
 
     <!-- Offcanvas Menu Begin -->
     <div class="offcanvas-menu-overlay"></div>
@@ -36,7 +47,7 @@
         <div class="offcanvas__option">
             <div class="offcanvas__links">
                 {% if request.user.is_authenticated %}
-                <a href="{% url 'logout' %}"> Logout </a> {% else %}
+                <a href="{% url 'logout' %}"> {{ request.user }} / Logout </a>{% else %}
                 <a href="{% url 'login' %}">Sign in</a>
                 <a href="{% url 'register' %}">Sign up</a> {% endif %}
             </div>
@@ -68,7 +79,7 @@
                         <div class="header__top__right">
                             <div class="header__top__links">
                                 {% if request.user.is_authenticated %}
-                                <a href="{% url 'logout' %}"> Logout </a> {% else %}
+                                <a href="{% url 'logout' %}">{{ request.user }} / Logout </a> {% else %}
                                 <a href="{% url 'login' %}">Sign in</a>
                                 <a href="{% url 'register' %}">Sign up</a> {% endif %}
                             </div>
@@ -88,7 +99,12 @@
                     <nav class="header__menu mobile-menu">
                         <ul>
                             <li class="active"><a href="{% url 'index' %}">Home</a></li>
-                            <li><a href="{% url 'shop' %}">Shop</a></li>
+                            <li><a href="{% url 'shop' %}">Shop</a> {% if user.user_type == 'Seller Account' %}
+                                <ul class="dropdown">
+                                    <li><a href="{% url 'Seller:add_products' %}">Add Product</a></li>
+                                </ul>
+                                {% endif %}
+                            </li>
                             <li><a href="#">Pages</a>
                                 <ul class="dropdown">
                                     <li><a href="{% url 'wishlist' %}">Wishlist</a></li>
@@ -104,6 +120,7 @@
                                     <li><a href="{% url 'blog' %}">Blogs</a></li>
                                     <li><a href="{% url 'blog_post' %}">Add Blog</a></li>
                                     <li><a href="{% url 'my_blog' %}">My Blogs</a></li>
+                                    <li><a href="{% url 'fav_blog' %}">My Favourite Blogs</a></li>
 
                                     <!-- <li><a href="./checkout.html">Check Out</a></li> -->
                                     <!-- <li><a href="./blog-details.html">Blog Details</a></li> -->
@@ -201,7 +218,6 @@
     <!-- Js Plugins -->
     <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <!-- <script src="{% static 'js/jquery.nice-select.min.js' %}"></script> -->
     <script src="{% static 'js/jquery.nicescroll.min.js' %}"></script>
     <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
     <script src="{% static 'js/jquery.countdown.min.js' %}"></script>
@@ -209,6 +225,29 @@
     <script src="{% static 'js/mixitup.min.js' %}"></script>
     <script src="{% static 'js/owl.carousel.min.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+    {% for msg in messages %} {% if msg.tags == 'success'%}
+    <script>
+        alertify.set('notifier', 'position', 'top-right');
+        alertify.success('{{msg}}');
+    </script>
+    {% elif msg.tags == 'info' %}
+    <script>
+        alertify.set('notifier', 'position', 'top-right');
+        alertify.notify('{{msg}}');
+    </script>
+    {% elif msg.tags == 'warning' %}
+    <script>
+        alertify.set('notifier', 'position', 'top-right');
+        alertify.warning('{{msg}}');
+    </script>
+    {% elif msg.tags == 'error' %}
+    <script>
+        alertify.set('notifier', 'position', 'top-right');
+        alertify.error('{{msg}}');
+    </script>
+    {% endif %} {% endfor %}
 </body>
 
 </html>

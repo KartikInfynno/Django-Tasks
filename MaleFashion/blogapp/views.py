@@ -1,18 +1,55 @@
-
-from django.shortcuts import redirect, render
+import random
+from django.shortcuts import redirect, render, HttpResponse
 from django.contrib import messages
 from Auths.models import My_User
 from .forms import Post_Blog
-from .models import Blogs
-
+from .models import Blogs,Comments,Fav_Blogs, IP_Model
+import json
+from datetime import datetime
+from django.db.models import Q
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.forms.models import model_to_dict
 
 def blog_index(request):
-    data = Blogs.objects.all()
+    if 'search' in request.GET:
+        search = request.GET['search']
+        # multiple_q = Q(Q(category__icontains=search))
+        if search == 'not_approved':
+            data = Blogs.objects.filter(is_approved=False)
+        elif search == 'approved':
+            data = Blogs.objects.filter(is_approved=True)
+        else:
+            data = Blogs.objects.filter(title__icontains=search,is_approved=True)
+        p = Paginator(data,9)
+        page_number = request.GET.get('page')
+        try:
+            page_obj = p.get_page(page_number)
+        except PageNotAnInteger:
+            page_obj = p.page(1)
+        except EmptyPage:
+            page_obj = p.page(p.num_pages)
+    else:
+        data = Blogs.objects.all()
+        p = Paginator(data,9)
+        page_number = request.GET.get('page')
+        try:
+            page_obj = p.get_page(page_number)
+        except PageNotAnInteger:
+            page_obj = p.page(1)
+        except EmptyPage:
+            page_obj = p.page(p.num_pages)
+    li = []
+    fav_blog = Fav_Blogs.objects.filter(user = request.user.id)
+    for i in fav_blog:
+        if i.blog in page_obj:
+            li.append(i.blog)
 
     context = {
-        'data': data,
+        'data': page_obj,
+        'fav_blog': li
     }
     return render(request, 'blogapp/blog-index.html', context)
+
 
 def my_blogs(request):
     # user =
@@ -44,8 +81,6 @@ def blog_create(request):
     }
     return render(request, 'blogapp/blog-create.html',context)
 
-
-
 '''
     View of Admin Approval
     When u render the template it'll show checked if it is apprved by the id of the checkbox id
@@ -55,7 +90,7 @@ def blog_create(request):
 def admin_approval(request):
     # get all Blog List
 
-    blog_list = Blogs.objects.all()[::-1]
+    blog_list = Blogs.objects.all().order_by('-pub_date')
 
     # Check if the user is superuser or not
     if request.user.is_superuser:
@@ -84,10 +119,8 @@ def admin_approval(request):
                 #if the id matches it'll make them approved
 
                 Blogs.objects.filter(id=i).update(is_approved=True)
-
-            messages.success(request,('Admin Request Approved'))
+            messages.success(request, "Blog Request Approved")
             return redirect('admin_approve')
-            pass
         else:
             context = {
                 'blog_list': blog_list,
@@ -100,3 +133,86 @@ def admin_approval(request):
     else:
         messages.success(request,('You are not authorized to view this page'))
     return render(request, 'blogapp/admin-approval.html')
+
+
+def blog_details(request,id):
+    get_blog = Blogs.objects.get(id=id)
+    if 'name' in request.GET and 'comment' in request.GET:
+        name = request.GET['name']
+        comment = request.GET['comment']
+        if len(name) > 0 and len(comment) > 0:
+            Comments.objects.create(user=request.user, blog=get_blog , name=name, comment=comment)
+            messages.success(request, 'Commented Successfully Your Comment will be under moderation.')
+        else:
+            messages.error(request, 'Comment Invalid')
+        return redirect(request.META['HTTP_REFERER'])
+
+    if request.user == get_blog.user:
+        comment = Comments.objects.filter(blog=get_blog)
+        if request.method == 'POST':
+
+            approve_id = request.POST.get('boxes')
+
+            if approve_id is None:
+                Comments.objects.filter(id=approve_id).update(is_approved=False)
+
+            else:
+                Comments.objects.filter(id=approve_id).update(is_approved=True)
+            messages.success(request, 'Comments Status updated successfully')
+    def get_ip(request):
+        address = request.META.get('HTTP_X_FORWARDED_FOR')
+        if address:
+            ip = address.split(',')[-1].strip()
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+        return f'{ip}'
+    ip = get_ip(request)
+    user = My_User.objects.get(id=request.user.id)
+    u = IP_Model(ip=ip,user=user,blog=get_blog)
+    multiple_q = Q(Q(ip__icontains=ip,user=user,blog=get_blog))
+    result = IP_Model.objects.filter(multiple_q)
+    if len(result) >= 1:
+        print('user exist')
+    else:
+        u.save()
+        count = IP_Model.objects.filter(blog=get_blog).count()
+        get_blog.count = count
+        get_blog.save()
+    usr_blog1 = Blogs.objects.filter(user=get_blog.user).values()
+    usr_blog2 = Blogs.objects.filter(user=get_blog.user).values()
+    comment = Comments.objects.filter(blog=get_blog)
+    context = {
+        'blog_list': get_blog,
+        'comment':  comment,
+        'total_comments': len(comment),
+        'blog1': random.choice(usr_blog1),
+        'blog2': random.choice(usr_blog2),
+    }
+    return render(request, 'blogapp/blog-details.html',context)
+
+def blog_delete(request,id):
+    data = Blogs.objects.get(id=id).delete()
+    # data.delete()
+    return redirect('my_blog')
+
+
+def add_fav_blog(request,id):
+    user = My_User.objects.get(id=request.user.id)
+    blog = Blogs.objects.get(id=id)
+    Fav_Blogs.objects.create(user=user,blog=blog)
+    messages.success(request,"Successfully Added To Fav Blog")
+    return redirect('fav_blog')
+
+def fav_blogs(request):
+    fav_blogs = Fav_Blogs.objects.filter(user=request.user.id)
+    context = {
+        'data': fav_blogs,
+    }
+    return render(request, 'blogapp/fav-blogs.html',context)
+
+def rem_fav_blog(request,id):
+    blog = Fav_Blogs.objects.get(pk=id)
+    # fav_blogs.get(id=id)
+    blog.delete()
+    messages.success(request,'Removed from Favourite Blog')
+    return redirect('fav_blog')
