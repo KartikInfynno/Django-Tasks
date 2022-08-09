@@ -2791,7 +2791,7 @@ ol {
     position: relative;
 }
 
-.blog__item__text a:after {
+.blog__item__text .read_more:after {
     position: absolute;
     left: 0;
     bottom: 0;
