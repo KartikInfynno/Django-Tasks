@@ -1,9 +1,10 @@
+from pkgutil import get_data
 import random
 from django.shortcuts import redirect, render, HttpResponse
 from django.contrib import messages
 from Auths.models import My_User
 from .forms import Post_Blog
-from .models import Blogs,Comments,Fav_Blogs, IP_Model
+from .models import Blogs,Comments,Fav_Blogs, IP_Model, Blogger_Profile, PostImage
 import json
 from datetime import datetime
 from django.db.models import Q
@@ -137,6 +138,9 @@ def admin_approval(request):
 
 def blog_details(request,id):
     get_blog = Blogs.objects.get(id=id)
+    profile = Blogger_Profile.objects.get(user=get_blog.user)
+    photos = PostImage.objects.filter(post=get_blog)
+    print(profile)
     if 'name' in request.GET and 'comment' in request.GET:
         name = request.GET['name']
         comment = request.GET['comment']
@@ -159,6 +163,7 @@ def blog_details(request,id):
             else:
                 Comments.objects.filter(id=approve_id).update(is_approved=True)
             messages.success(request, 'Comments Status updated successfully')
+
     def get_ip(request):
         address = request.META.get('HTTP_X_FORWARDED_FOR')
         if address:
@@ -166,6 +171,7 @@ def blog_details(request,id):
         else:
             ip = request.META.get('REMOTE_ADDR')
         return f'{ip}'
+    # print(request.META.get('HTTP_X_FORWARDED_FOR'))
     ip = get_ip(request)
     user = My_User.objects.get(id=request.user.id)
     u = IP_Model(ip=ip,user=user,blog=get_blog)
@@ -187,6 +193,7 @@ def blog_details(request,id):
         'total_comments': len(comment),
         'blog1': random.choice(usr_blog1),
         'blog2': random.choice(usr_blog2),
+        'photos' : photos,
     }
     return render(request, 'blogapp/blog-details.html',context)
 
@@ -216,3 +223,14 @@ def rem_fav_blog(request,id):
     blog.delete()
     messages.success(request,'Removed from Favourite Blog')
     return redirect('fav_blog')
+
+def profile_view(request,id):
+    get_blog = Blogs.objects.get(id=id)
+    profile = Blogger_Profile.objects.get(user=get_blog.user)
+    my_blogs = Blogs.objects.filter(profile=profile).order_by('-count')
+    print(profile)
+    context = {
+        'data': profile,
+        'blog': my_blogs,
+    }
+    return render(request, 'blogapp/profile.html',context)

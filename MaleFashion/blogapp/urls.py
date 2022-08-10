@@ -1,3 +1,4 @@
+
 from django.urls import path
 from . import views
 
@@ -11,4 +12,5 @@ urlpatterns = [
     path('blog_post', views.blog_create, name='blog_post'),
     path('fav_blogs', views.fav_blogs, name='fav_blog'),
     path('admin_approval', views.admin_approval, name='admin_approve'),
+    path('<int:id>/profile', views.profile_view, name='profile'),
 ]
